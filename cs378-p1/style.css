@@ -29,8 +29,8 @@ body {
   font-weight: bold;
   text-align: center;
   margin-bottom: 5px;
-  color: red; /* Change the title color to red */
-  font-family: 'Georgia', serif; /* Use Georgia font for the title */
+  color: red;
+  font-family: 'Georgia', serif;
 }
 
 .menu-subtitle {
