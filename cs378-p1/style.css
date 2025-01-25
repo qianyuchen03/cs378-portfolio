@@ -51,8 +51,8 @@ body {
 }
 
 .item-img {
-  width: 100px;
-  height: 75px;
+  width: 120px;
+  height: 80px;
   border-radius: 10px;
   object-fit: cover;
 }
