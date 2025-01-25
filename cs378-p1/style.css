@@ -2,15 +2,25 @@
 body {
   font-family: 'Arial', sans-serif;
   background-color: #f9f9f9;
-  color: #333;
+  color: #000;
 }
 
 .container {
-  max-width: 600px;
+  max-width: 700px;
   background: white;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo Styles */
+.logo-container {
+  text-align: center;
+}
+
+.logo-img {
+  max-width: 150px;
+  border-radius: 50%;
 }
 
 /* Title Styles */
@@ -24,7 +34,7 @@ body {
 .menu-subtitle {
   font-size: 18px;
   text-align: center;
-  color: #666;
+  color: #555;
   margin-bottom: 20px;
 }
 
@@ -32,10 +42,23 @@ body {
 .menu-item {
   border-bottom: 1px solid #ddd;
   padding: 15px 0;
+  display: flex;
+  gap: 15px;
 }
 
 .menu-item:last-child {
   border-bottom: none;
+}
+
+.item-img {
+  width: 100px;
+  height: 75px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.item-info {
+  flex: 1;
 }
 
 .item-title {
