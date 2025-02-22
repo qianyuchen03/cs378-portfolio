@@ -19,41 +19,52 @@ const menuItems = [
 
 function App() {
   const [cart, setCart] = useState({});
+  const [total, setTotal] = useState(0);
 
   const addToCart = (id) => {
-    setCart((prevCart) => ({ ...prevCart, [id]: (prevCart[id] || 0) + 1 }));
+    setCart((prevCart) => {
+      const newCart = { ...prevCart, [id]: (prevCart[id] || 0) + 1 };
+      setTotal(calculateTotal(newCart));
+      return newCart;
+    });
   };
 
   const removeFromCart = (id) => {
-    setCart((prevCart) => ({
-      ...prevCart,
-      [id]: prevCart[id] > 0 ? prevCart[id] - 1 : 0,
-    }));
+    setCart((prevCart) => {
+      const newCart = { ...prevCart };
+      if (newCart[id] > 0) {
+        newCart[id] -= 1;
+        setTotal(calculateTotal(newCart));
+      }
+      return newCart;
+    });
   };
 
   const clearCart = () => {
     setCart({});
+    setTotal(0);
+  };
+
+  const calculateTotal = (cart) => {
+    return Object.keys(cart).reduce((sum, id) => {
+      const item = menuItems.find((item) => item.id === parseInt(id));
+      return sum + item.price * cart[id];
+    }, 0);
   };
 
   const placeOrder = () => {
-    const orderItems = Object.entries(cart).filter(([_, qty]) => qty > 0);
-    if (orderItems.length === 0) {
+    const orderedItems = Object.keys(cart).filter((id) => cart[id] > 0);
+    if (orderedItems.length === 0) {
       alert('No items in cart');
-      return;
+    } else {
+      const orderSummary = orderedItems
+        .map((id) => {
+          const item = menuItems.find((item) => item.id === parseInt(id));
+          return `${item.title} x ${cart[id]}`;
+        })
+        .join('\n');
+      alert(`Order placed!\n\n${orderSummary}\n\nTotal: $${total.toFixed(2)}`);
     }
-    let orderSummary = 'Order placed!\n\n';
-    orderItems.forEach(([id, qty]) => {
-      const item = menuItems.find((item) => item.id === parseInt(id));
-      orderSummary += `${item.title}: ${qty}\n`;
-    });
-    alert(orderSummary);
-  };
-
-  const calculateTotal = () => {
-    return Object.entries(cart).reduce((total, [id, qty]) => {
-      const item = menuItems.find((item) => item.id === parseInt(id));
-      return total + item.price * qty;
-    }, 0).toFixed(2);
   };
 
   return (
@@ -65,23 +76,25 @@ function App() {
       <p className="menu-subtitle">Enjoy our delicious selection of authentic Japanese dishes.</p>
       <div className="menu">
         {menuItems.map((item) => (
-          <MenuItem 
-            key={item.id} 
-            title={item.title} 
-            description={item.description} 
-            imageName={item.imageName} 
-            price={item.price} 
-            count={cart[item.id] || 0}
-            add={() => addToCart(item.id)}
-            remove={() => removeFromCart(item.id)}
+          <MenuItem
+            key={item.id}
+            id={item.id}
+            title={item.title}
+            description={item.description}
+            imageName={item.imageName}
+            price={item.price}
+            quantity={cart[item.id] || 0}
+            addToCart={addToCart}
+            removeFromCart={removeFromCart}
           />
         ))}
       </div>
-      <div className="cart-summary">
-        <h2>Cart Summary</h2>
-        <p>Total: ${calculateTotal()}</p>
+      <div className="cart-controls">
         <button className="btn btn-danger" onClick={clearCart}>Clear All</button>
         <button className="btn btn-success" onClick={placeOrder}>Order</button>
+      </div>
+      <div className="total">
+        <strong>Total: ${total.toFixed(2)}</strong>
       </div>
     </div>
   );

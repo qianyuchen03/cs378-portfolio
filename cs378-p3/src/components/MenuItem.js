@@ -1,6 +1,6 @@
 import React from 'react';
 
-const MenuItem = ({ title, description, imageName, price }) => {
+const MenuItem = ({ id, title, description, imageName, price, quantity, addToCart, removeFromCart }) => {
   return (
     <div className="menu-item">
       <img src={`/images/${imageName}`} alt={title} className="item-img" />
@@ -9,7 +9,11 @@ const MenuItem = ({ title, description, imageName, price }) => {
         <p className="item-description">{description}</p>
         <div className="item-footer">
           <span className="item-price">${price.toFixed(2)}</span>
-          <button className="btn btn-primary btn-add">Add to Cart</button>
+          <div className="quantity-controls">
+            <button className="btn btn-secondary" onClick={() => removeFromCart(id)}>-</button>
+            <span className="quantity">{quantity}</span>
+            <button className="btn btn-secondary" onClick={() => addToCart(id)}>+</button>
+          </div>
         </div>
       </div>
     </div>
